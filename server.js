@@ -3,7 +3,6 @@ const path    = require("path");
 const bcrypt  = require("bcrypt");
 const session = require("express-session");
 const db      = require("./db");
-const history = require("./history");
 
 const app = express();
 
@@ -70,7 +69,7 @@ function normalizeEmotion(raw) {
    HELPER: Hitung summary per siswa dari tabel detection
 ========================= */
 function buildSummariesFromDetection(callback) {
-  history.query(
+  db.query(
     `SELECT
        d.student_id,
        u.name        AS student_name,
@@ -279,7 +278,7 @@ app.delete("/api/users/:id", requireLogin, (req, res) => {
     if (err)                        return res.status(500).json({ success: false, message: "Database error." });
     if (result.affectedRows === 0)  return res.status(404).json({ success: false, message: "User tidak ditemukan." });
 
-    history.query("DELETE FROM detection WHERE student_id = ?", [targetId], (err2) => {
+    db.query("DELETE FROM detection WHERE student_id = ?", [targetId], (err2) => {
       if (err2) console.warn("[DB] Gagal hapus detection untuk user", targetId, err2);
     });
 
@@ -305,7 +304,7 @@ app.post("/api/detection", requireLogin, (req, res) => {
     : new Date().toISOString().slice(0, 19).replace("T", " ");
   const createdAt  = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-  history.query(
+  db.query(
     `INSERT INTO detection (face_detection, expression, duration, local_time, created_at, video_type, student_id)
      VALUES (?, ?, ?, ?, ?, ?, ?)`,
     [faceDetect, expr, dur, localTime, createdAt, vark, sid],
@@ -381,7 +380,7 @@ app.get("/api/feed", requireLogin, (req, res) => {
 
   const params = sid ? [sid] : [];
 
-  history.query(sql, params, (err, rows) => {
+  db.query(sql, params, (err, rows) => {
     if (err) { console.error("[feed] DB error:", err); return res.status(500).json({ error: "db_error" }); }
 
     const emojiMap = { Normal:"🙂", Bosan:"😐", Bingung:"🤔", Menguap:"😮" };
@@ -410,11 +409,11 @@ app.get("/api/feed", requireLogin, (req, res) => {
 app.get("/api/history", requireLogin, (req, res) => {
   const limit  = parseInt(req.query.limit)  || 200;
   const offset = parseInt(req.query.offset) || 0;
-  history.query(
+  db.query(
     "SELECT COUNT(*) AS total, MAX(id) AS maxId FROM detection",
     (err, totals) => {
       if (err) { console.error(err); return res.status(500).json({ error: "db_error" }); }
-      history.query(
+      db.query(
         "SELECT * FROM detection ORDER BY id DESC LIMIT ? OFFSET ?",
         [limit, offset],
         (err2, rows) => {
@@ -428,9 +427,9 @@ app.get("/api/history", requireLogin, (req, res) => {
 
 app.get("/api/history/latest", requireLogin, (req, res) => {
   const since = parseInt(req.query.since) || 0;
-  history.query("SELECT * FROM detection WHERE id > ? ORDER BY id ASC", [since], (err, newRows) => {
+  db.query("SELECT * FROM detection WHERE id > ? ORDER BY id ASC", [since], (err, newRows) => {
     if (err) { console.error(err); return res.status(500).json({ error: "db_error" }); }
-    history.query("SELECT COUNT(*) AS total, MAX(id) AS maxId FROM detection", (err2, totals) => {
+    db.query("SELECT COUNT(*) AS total, MAX(id) AS maxId FROM detection", (err2, totals) => {
       if (err2) { console.error(err2); return res.status(500).json({ error: "db_error" }); }
       res.json({ rows: newRows, maxId: totals[0].maxId || since, total: totals[0].total || 0 });
     });
@@ -438,9 +437,9 @@ app.get("/api/history/latest", requireLogin, (req, res) => {
 });
 
 app.post("/api/history/clear", requireLogin, (req, res) => {
-  history.query("DELETE FROM detection", (err) => {
+  db.query("DELETE FROM detection", (err) => {
     if (err) { console.error(err); return res.status(500).json({ success: false }); }
-    history.query("ALTER TABLE detection AUTO_INCREMENT = 1", (err2) => {
+    db.query("ALTER TABLE detection AUTO_INCREMENT = 1", (err2) => {
       if (err2) console.warn("Could not reset AUTO_INCREMENT:", err2);
       res.json({ success: true });
     });
@@ -470,7 +469,7 @@ app.post("/api/session-summary/save", requireLogin, (req, res) => {
 
   const sid = String(data.studentId);
 
-  history.query(
+  db.query(
     `SELECT d.student_id, u.name AS student_name, d.video_type, d.expression, d.duration
      FROM detection d
      LEFT JOIN users u ON u.id = d.student_id
@@ -567,7 +566,7 @@ app.get("/api/session-summary", requireLogin, (req, res) => {
    SESSION SUMMARY API — CLEAR ALL
 ========================= */
 app.post("/api/session-summary/clear", requireLogin, (req, res) => {
-  history.query("DELETE FROM detection WHERE student_id IS NOT NULL", (err) => {
+  db.query("DELETE FROM detection WHERE student_id IS NOT NULL", (err) => {
     if (err) { console.error(err); return res.status(500).json({ success: false }); }
     res.json({ success: true });
   });
@@ -580,7 +579,7 @@ app.post("/api/session-summary/reset-student", requireLogin, (req, res) => {
   const sid = String(req.session.user?.id || "");
   if (!sid) return res.status(400).json({ error: "invalid" });
 
-  history.query("DELETE FROM detection WHERE student_id = ?", [sid], (err) => {
+  db.query("DELETE FROM detection WHERE student_id = ?", [sid], (err) => {
     if (err) { console.error("[reset-student] DB error:", err); return res.status(500).json({ success: false }); }
 
     if (liveState.students[sid]) {
