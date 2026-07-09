@@ -1,18 +1,19 @@
 const mysql = require("mysql2");
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "edmotion",
+  host: process.env.MYSQLHOST,
+  port: process.env.MYSQLPORT,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
 });
 
 db.connect((err) => {
   if (err) {
-    console.log("Database gagal connect!");
-    console.log(err);
+    console.error("Database gagal connect!");
+    console.error(err);
   } else {
-    console.log("Database connected");
+    console.log("Database connected!");
   }
 });
 
