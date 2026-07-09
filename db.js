@@ -1,18 +1,26 @@
 const mysql = require("mysql2");
 
-const db = mysql.createConnection({
-  host    : process.env.DB_HOST     || "localhost",
-  port    : process.env.DB_PORT     || 3306,
-  user    : process.env.DB_USER     || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME     || "railway",
+const db = mysql.createPool({
+  host: process.env.MYSQLHOST,
+  port: process.env.MYSQLPORT,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
 });
 
-db.connect((err) => {
+// Tes koneksi saat aplikasi dijalankan
+db.getConnection((err, connection) => {
   if (err) {
-    console.error("[DB] edmotion gagal connect:", err.message);
+    console.error("[DB] Gagal connect:", err.message);
   } else {
-    console.log("[DB] connected ke database:", process.env.DB_NAME || "railway");
+    console.log("[DB] Database connected!");
+    connection.release(); // kembalikan koneksi ke pool
   }
 });
 
