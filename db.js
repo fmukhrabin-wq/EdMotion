@@ -1,19 +1,18 @@
 const mysql = require("mysql2");
 
 const db = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  port: process.env.MYSQLPORT,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
+  host    : process.env.DB_HOST     || "localhost",
+  port    : process.env.DB_PORT     || 3306,
+  user    : process.env.DB_USER     || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME     || "railway",
 });
 
 db.connect((err) => {
   if (err) {
-    console.error("Database gagal connect!");
-    console.error(err);
+    console.error("[DB] edmotion gagal connect:", err.message);
   } else {
-    console.log("Database connected!");
+    console.log("[DB] connected ke database:", process.env.DB_NAME || "railway");
   }
 });
 
