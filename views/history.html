@@ -9,19 +9,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#080f1c;--surface:#0d1829;--card:#111e30;
-  --border:rgba(255,255,255,.06);
-  --muted:#64748b;--text:#e2eaf6;
-  --accent:#6ee7b7;
-  --blue:#60a5fa;--red:#f87171;--green:#4ade80;
+  --bg:#eef2ff;--surface:#f8faff;--card:#ffffff;
+  --border:rgba(59,130,246,0.12);
+  --muted:#64748b;--text:#0f172a;
+  --accent:#10b981;
+  --blue:#3b82f6;--red:#ef4444;--green:#10b981;
   --radius:14px;
   font-family:'Space Grotesk',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+.cm-cell{width:68px;height:52px;border-radius:8px;text-align:center;vertical-align:middle;font-size:13px;font-weight:500;transition:opacity .2s}
+.cm-head{padding:8px 12px;font-size:12px;color:var(--muted);text-align:center;font-weight:600;white-space:nowrap}
+.cm-label{padding:8px 12px;font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
 body{background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
 .app{display:flex;min-height:100vh}
 
-/* ── Sidebar ── */
 .sidebar{width:240px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;}
 .brand{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
 .logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#052e1e;}
@@ -29,18 +31,18 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
 .brand-sub{font-size:11px;color:var(--muted);margin-top:2px;}
 nav{display:flex;flex-direction:column;gap:4px;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--muted);cursor:pointer;text-decoration:none;font-size:14px;transition:all .18s;}
-.nav-item:hover{background:rgba(255,255,255,.04);color:var(--text);}
-.nav-item.active{background:rgba(96,165,250,.1);color:var(--blue);border-left:3px solid var(--blue);padding-left:9px;}
+.nav-item:hover{background:rgba(59,130,246,0.06);color:var(--text);}
+.nav-item.active{background:rgba(59,130,246,.12);color:var(--blue);border-left:3px solid var(--blue);padding-left:9px;}
 .sidebar-footer{margin-top:auto;padding-top:16px;border-top:1px solid var(--border);position:relative;}
 .profile-btn{display:flex;gap:10px;align-items:center;cursor:pointer;padding:6px 8px;border-radius:10px;transition:all .18s;}
-.profile-btn:hover{background:rgba(255,255,255,.04);}
+.profile-btn:hover{background:rgba(59,130,246,0.06);}
 .avatar{width:38px;height:38px;border-radius:9px;background:linear-gradient(180deg,#0ea5b3,#2563eb);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;}
 .profile-name{font-size:13px;font-weight:600;}
 .profile-role{font-size:11px;color:var(--muted);}
-.user-dropdown{display:none;position:absolute;bottom:calc(100% + 8px);left:0;right:0;background:#0d1829;border:1px solid var(--border);border-radius:10px;padding:6px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.user-dropdown{display:none;position:absolute;bottom:calc(100% + 8px);left:0;right:0;background:#ffffff;border:1px solid var(--border);border-radius:10px;padding:6px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.12);}
 .user-dropdown.open{display:block;}
 .dropdown-item{padding:9px 12px;border-radius:7px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .18s;}
-.dropdown-item:hover{background:rgba(248,113,113,.12);color:var(--red);}
+.dropdown-item:hover{background:rgba(239,68,68,.1);color:var(--red);}
 
 /* ── Main ── */
 .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:20px;min-width:0;}
@@ -60,7 +62,7 @@ nav{display:flex;flex-direction:column;gap:4px;}
 .search-wrap{display:flex;align-items:center;gap:12px;}
 .search{flex:1;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);padding:10px 14px;border-radius:10px;transition:border-color .2s;}
 .search:focus-within{border-color:var(--blue);}
-.search input{background:none;border:0;outline:0;color:#fff;width:100%;font-size:14px;font-family:'Space Grotesk',sans-serif;}
+.search input{background:none;border:0;outline:0;color:#0f172a;width:100%;font-size:14px;font-family:'Space Grotesk',sans-serif;}
 .search-clear{display:none;color:var(--muted);cursor:pointer;font-size:16px;background:none;border:none;padding:0;line-height:1;}
 .search-clear.visible{display:block}
 
@@ -79,7 +81,7 @@ th:hover{color:var(--text);}
 th .sort-icon{font-size:10px;margin-left:4px;opacity:.5;}
 th.sorted .sort-icon{opacity:1;color:var(--blue);}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.02)}
+tr:hover td{background:rgba(59,130,246,0.04)}
 tr.hidden-row{display:none}
 td.mono{font-family:'DM Mono',monospace;font-size:12px;}
 mark{background:rgba(96,165,250,.25);color:var(--blue);border-radius:3px;padding:0 2px;}
@@ -87,27 +89,27 @@ mark{background:rgba(96,165,250,.25);color:var(--blue);border-radius:3px;padding
 #noResultsRow.visible{display:table-row}
 
 .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.btn-pause{padding:8px 14px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-weight:600;font-size:13px;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .18s;}
-.btn-pause:hover{background:rgba(255,255,255,.1);color:#fff;}
+.btn-pause{padding:8px 14px;border-radius:10px;background:rgba(59,130,246,0.06);border:1px solid var(--border);color:var(--muted);font-weight:600;font-size:13px;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .18s;}
+.btn-pause:hover{background:rgba(59,130,246,0.12);color:var(--blue);}
 .btn-danger{padding:10px 18px;border-radius:10px;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.4);color:var(--red);font-weight:600;font-size:14px;cursor:pointer;white-space:nowrap;font-family:'Space Grotesk',sans-serif;transition:all .18s;}
 .btn-danger:hover{background:rgba(248,113,113,.22);border-color:var(--red);color:#fff;}
 
 /* Modal */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;align-items:center;justify-content:center;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:999;align-items:center;justify-content:center;}
 .modal-overlay.show{display:flex}
-.modal-box{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:32px;text-align:center;max-width:380px;width:90%;}
+.modal-box{background:var(--card);border:1px solid rgba(0,0,0,.10);border-radius:var(--radius);padding:32px;text-align:center;max-width:380px;width:90%;}
 .modal-icon{font-size:40px;margin-bottom:16px;}
 .modal-title{font-size:18px;font-weight:700;margin-bottom:8px;color:var(--red);}
 .modal-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px;}
 .modal-actions{display:flex;gap:10px;justify-content:center;}
-.modal-cancel{padding:9px 22px;border-radius:9px;font-size:13px;font-weight:600;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--text);cursor:pointer;font-family:'Space Grotesk',sans-serif;}
+.modal-cancel{padding:9px 22px;border-radius:9px;font-size:13px;font-weight:600;background:rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.12);color:var(--text);cursor:pointer;font-family:'Space Grotesk',sans-serif;}
 .modal-confirm{padding:9px 22px;border-radius:9px;font-size:13px;font-weight:600;background:#ef4444;border:none;color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:background .18s;}
 .modal-confirm:hover{background:#dc2626}
 .modal-confirm:disabled{opacity:.5;cursor:not-allowed}
 
 /* Loading state */
 .loading-row td{text-align:center;color:var(--muted);padding:32px;}
-.spinner-inline{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.15);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle;}
+.spinner-inline{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,0,0,.12);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 @media(max-width:900px){
@@ -210,7 +212,7 @@ mark{background:rgba(96,165,250,.25);color:var(--blue);border-radius:3px;padding
         <tr>
           <th onclick="sortTable(0)" id="th-0">ID <span class="sort-icon">↕</span></th>
           <th onclick="sortTable(1)" id="th-1">Face Detection <span class="sort-icon">↕</span></th>
-          <th onclick="sortTable(2)" id="th-2">Expression <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(2)" id="th-2">Expression (Predicted) <span class="sort-icon">↕</span></th>
           <th onclick="sortTable(3)" id="th-3">Duration <span class="sort-icon">↕</span></th>
           <th onclick="sortTable(4)" id="th-4">Local Time <span class="sort-icon">↕</span></th>
           <th onclick="sortTable(5)" id="th-5">Created At <span class="sort-icon">↕</span></th>
@@ -218,10 +220,10 @@ mark{background:rgba(96,165,250,.25);color:var(--blue);border-radius:3px;padding
       </thead>
       <tbody id="tableBody">
         <tr class="loading-row">
-          <td colspan="6"><span class="spinner-inline"></span>Loading data…</td>
+          <td colspan="7"><span class="spinner-inline"></span>Loading data…</td>
         </tr>
         <tr id="noResultsRow">
-          <td colspan="6" style="text-align:center;color:var(--muted);padding:32px">
+          <td colspan="7" style="text-align:center;color:var(--muted);padding:32px">
             🔍 No data matches your search.
           </td>
         </tr>
@@ -263,12 +265,16 @@ const INTERVAL = 3000;
 })();
 
 // ── Load semua data dari /api/history ─────────────────────────────────────────
+const actualLabelsMap = {};
+let currentOffset = 0;
+const PAGE_SIZE   = 200;
+
 async function loadAll() {
   try {
-    const res  = await fetch('/api/history');
+    currentOffset = 0;
+    const res  = await fetch(`/api/history?limit=${PAGE_SIZE}&offset=0`, { credentials:'include' });
     const data = await res.json();
 
-    // Hapus loading row
     const loadingRow = document.querySelector('.loading-row');
     if (loadingRow) loadingRow.remove();
 
@@ -277,6 +283,7 @@ async function loadAll() {
       maxId      = data.maxId;
       totalCount = data.total;
       buildChips(data.rows);
+      currentOffset = data.rows.length;
     } else {
       totalCount = 0;
       showEmpty('No detection data yet. Waiting for data…');
@@ -286,11 +293,48 @@ async function loadAll() {
       `Total: ${totalCount} records`;
     document.getElementById('lastUpdated').textContent =
       'Last updated: ' + new Date().toLocaleTimeString();
+
+    // Tampilkan tombol load more jika masih ada data
+    updateLoadMoreBtn();
+
   } catch(e) {
     console.error('loadAll error:', e);
     showEmpty('Failed to load data. Check server connection.');
   }
 }
+
+async function loadMore() {
+  try {
+    const btn = document.getElementById('loadMoreBtn');
+    if (btn) { btn.textContent = 'Loading...'; btn.disabled = true; }
+    const res  = await fetch(`/api/history?limit=${PAGE_SIZE}&offset=${currentOffset}`, { credentials:'include' });
+    const data = await res.json();
+    if (data.rows && data.rows.length > 0) {
+      renderRows(data.rows);
+      currentOffset += data.rows.length;
+    }
+    updateLoadMoreBtn();
+  } catch(e) { console.error('loadMore error:', e); }
+}
+
+function updateLoadMoreBtn() {
+  let btn = document.getElementById('loadMoreBtn');
+  if (currentOffset >= totalCount) {
+    if (btn) btn.remove();
+    return;
+  }
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'loadMoreBtn';
+    btn.style.cssText = 'display:block;margin:16px auto;padding:8px 24px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:#e2eaf6;font-size:13px;cursor:pointer';
+    document.querySelector('.card')?.appendChild(btn);
+  }
+  btn.textContent = `Load more (${totalCount - currentOffset} remaining)`;
+  btn.disabled = false;
+  btn.onclick = loadMore;
+}
+
+
 
 // ── Render baris ke tabel ─────────────────────────────────────────────────────
 function renderRows(rows) {
@@ -303,6 +347,9 @@ function renderRows(rows) {
   filterRows();
 }
 
+
+
+
 function buildRow(row, isNew) {
   const tr = document.createElement('tr');
   tr.className = 'data-row' + (isNew ? ' row-new' : '');
@@ -313,10 +360,17 @@ function buildRow(row, isNew) {
   tr.dataset.localtime = String(row.local_time || '').toLowerCase();
   tr.dataset.createdat = String(row.created_at || '').toLowerCase();
 
+  const emotions = ['Normal','Bosan','Bingung','Menguap'];
+  const saved = actualLabelsMap[row.id] || '';
+  const opts = emotions.map(e =>
+    `<option value="${e}" ${saved===e?'selected':''}>${e}</option>`
+  ).join('');
+
   tr.innerHTML = `
     <td class="mono" data-col="id">${row.id}</td>
     <td class="mono" data-col="face">${row.face_detection}</td>
-    <td data-col="expr">${row.expression}</td>
+    <td data-col="expr"><span class="badge-pred">${row.expression}</span></td>
+
     <td class="mono" data-col="dur">${row.duration}</td>
     <td class="mono" data-col="lt">${row.local_time || '-'}</td>
     <td class="mono" data-col="ca">${row.created_at || '-'}</td>
@@ -327,6 +381,8 @@ function buildRow(row, isNew) {
   }
   return tr;
 }
+
+
 
 function showEmpty(msg) {
   const tbody   = document.getElementById('tableBody');
@@ -571,6 +627,7 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   fetch('/api/logout', { method: 'POST' })
     .finally(() => { window.location.href = '/'; });
 });
+
 </script>
 </body>
 </html>
